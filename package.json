@@ -1,23 +1,26 @@
 {
   "name": "module-map",
-  "version": "0.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "Transform module source at require-time.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "faucet"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/requireio/module-map.git"
   },
-  "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/requireio/module-map/issues"
   },
   "homepage": "https://github.com/requireio/module-map",
   "devDependencies": {
+    "faucet": "0.0.1",
     "tape": "^2.12.3",
     "traceur": "0.0.33"
+  },
+  "dependencies": {
+    "defaults": "^1.0.0"
   }
 }
