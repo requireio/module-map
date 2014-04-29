@@ -10,21 +10,29 @@ module.exports = mapExtension
 function mapExtension(directory) {
 
   var _compile = Module.prototype._compile
-  Module.prototype._compile = overridden
+  Module.prototype._compile = overriddenCompile
 
-  var fns = []
+  var mappings = []
+  var beforeMappings = []
+  var afterMappings = []
 
-  function overridden(content, filename) {
+  function overriddenCompile(content, filename) {
+    var fns = beforeMappings.concat(mappings).concat(afterMappings)
     content = fns.reduce(function(content, map) {
       if (!doMapping(directory, filename)) return content
       return map(content)
     }, content)
-
     return _compile.call(this, content, filename)
   }
 
   function map(fn) {
-    fns.push(fn)
+    mappings.push(fn)
+  }
+  map.before = function before(fn) {
+    beforeMappings.push(fn)
+  }
+  map.after = function after(fn) {
+    afterMappings.push(fn)
   }
   return map
 }

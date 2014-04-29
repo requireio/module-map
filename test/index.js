@@ -8,6 +8,7 @@ var tests = [
   "./not-recursive/index.js",
   "./multiple/index.js",
   "./recursive/index.js",
+  "./before-after/index.js",
   "./custom-directory/index.js",
   "./es6/index.js",
 ]
