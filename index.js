@@ -20,7 +20,7 @@ function mapExtension(directory) {
     var fns = beforeMappings.concat(mappings).concat(afterMappings)
     content = fns.reduce(function(content, map) {
       if (!doMapping(directory, filename)) return content
-      return map(content)
+      return map(content, filename)
     }, content)
     return _compile.call(this, content, filename)
   }
