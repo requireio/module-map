@@ -10,6 +10,7 @@ var tests = [
   "./recursive/index.js",
   "./before-after/index.js",
   "./custom-directory/index.js",
+  "./packagemap/index.js",
   "./es6/index.js",
 ]
 
@@ -27,7 +28,8 @@ function runTest(cmd, done) {
   // These tests necessarily modify require, so we run them in their own
   // process to ensure they can't affect each other or test runner itself.
   spawn(process.execPath, cmd.split(' '), {
-    cwd: __dirname
+    cwd: __dirname,
+    stdio: 'inherit'
   }).on('close', function(exitCode) {
     if (exitCode !== 0) return done(new Error('expected 0 exit code: ' + cmd))
     done()

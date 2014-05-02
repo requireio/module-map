@@ -2,7 +2,7 @@
 
 var test = require('tape')
 
-var ModuleMap = require('../../')(__dirname)
+var ModuleMap = require('../../').Map(__dirname)
 
 test('filenames are passed to map', function(t) {
   t.plan(1)

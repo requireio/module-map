@@ -2,7 +2,7 @@
 
 var test = require('tape')
 
-var ModuleMap = require('../../')(__dirname)
+var ModuleMap = require('../../').Map(__dirname)
 
 ModuleMap.after(function(content, filename) {
   return content.replace('during', 'after')

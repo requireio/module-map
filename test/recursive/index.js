@@ -2,7 +2,7 @@
 
 var test = require('tape')
 
-var ModuleMap = require('../../')()
+var ModuleMap = require('../../').Map()
 
 ModuleMap(function(content, filename) {
   return content.replace('REPLACEME', 'replaced!')

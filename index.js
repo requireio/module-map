@@ -1,48 +1,38 @@
 "use strict"
 
+var up = require('findup').sync
+var ModuleMap = require('./map')
+var dirname = require('path').dirname
 var path = require('path')
-var defaults = require('defaults')
 
-var Module = require('module')
+module.exports = PackageMap
+module.exports.Map = ModuleMap
 
-module.exports = mapExtension
+var processed = {}
 
-function mapExtension(directory) {
+function PackageMap(filename) {
+  if (processed[filename]) return false
 
-  var _compile = Module.prototype._compile
-  Module.prototype._compile = overriddenCompile
+  var dir = up(dirname(filename), 'package.json')
+  var pkg = require(path.resolve(dir, 'package.json'))
 
-  var mappings = []
-  var beforeMappings = []
-  var afterMappings = []
+  var mappings = toArray(pkg['module-map'])
+  if (!mappings.length) return
 
-  function overriddenCompile(content, filename) {
-    var fns = beforeMappings.concat(mappings).concat(afterMappings)
-    content = fns.reduce(function(content, map) {
-      if (!doMapping(directory, filename)) return content
-      return map(content, filename)
-    }, content)
-    return _compile.call(this, content, filename)
-  }
+  var moduleMap = ModuleMap(dir)
+  mappings.forEach(function(mapping) {
+    var fn = require(path.resolve(dir, mapping))
+    moduleMap(fn)
+  })
+  processed[filename] = moduleMap
 
-  function map(fn) {
-    mappings.push(fn)
-  }
-  map.before = function before(fn) {
-    beforeMappings.push(fn)
-  }
-  map.after = function after(fn) {
-    afterMappings.push(fn)
-  }
-  return map
+  delete require.cache[filename]
+  require(filename) // reload file
+  return true
 }
 
-function doMapping(directory, filename) {
-  if (!directory) return true
-  // ignore if node_modules is anywhere in the path between requirer
-  // and requiree
-  return !(
-    /node_modules\//.test(path.relative(filename, directory)) ||
-    /node_modules\//.test(path.relative(directory, filename))
-  )
+function toArray(item) {
+  if (!item) return []
+  if (Array.isArray(item)) return item
+  return [item]
 }

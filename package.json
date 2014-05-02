@@ -21,6 +21,7 @@
     "traceur": "0.0.33"
   },
   "dependencies": {
-    "defaults": "^1.0.0"
+    "defaults": "^1.0.0",
+    "findup": "^0.1.5"
   }
 }
